@@ -4,8 +4,8 @@
 </template>
 
 <script setup>
-import AppHeader from "./layouts/AppHeader.vue";
-import AppLayout from "./layouts/AppLayout.vue";
+import AppHeader from "@/layouts/AppHeader.vue";
+import AppLayout from "@/layouts/AppLayout.vue";
 </script>
 
 <style lang="scss">
