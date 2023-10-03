@@ -14,7 +14,13 @@
                 :key="dough.id"
                 class="dough__input dough__input--light"
               >
-                <input type="radio" name="dought" :value="dough.id" checked />
+                <input
+                  class="visually-hidden"
+                  type="radio"
+                  name="dought"
+                  :value="dough.id"
+                  checked
+                />
                 <b>{{ dough.name }}</b>
                 <span>{{ dough.description }}</span>
               </label>
@@ -32,7 +38,12 @@
                 :key="size.id"
                 class="diameter__input diameter__input--small"
               >
-                <input type="radio" name="diameter" :value="size.id" />
+                <input
+                  class="visually-hidden"
+                  type="radio"
+                  name="diameter"
+                  :value="size.id"
+                />
                 <span>{{ size.name }}</span>
               </label>
             </div>
@@ -135,3 +146,101 @@ import ingredients from "@/mocks/ingredients.json";
 import sizes from "@/mocks/sizes.json";
 import doughTypes from "@/mocks/dough.json";
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/scss/app.scss";
+
+.content {
+  padding-top: 20px;
+}
+
+.content__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  width: 920px;
+  margin: 0 auto;
+  padding-right: 2.12%;
+  padding-bottom: 30px;
+  padding-left: 2.12%;
+}
+
+.content__dough {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__diameter {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__ingredients {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.content__pizza {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content__constructor {
+  width: 315px;
+  margin-top: 25px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.content__result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 25px;
+
+  p {
+    @include b-s24-h28;
+
+    margin: 0;
+  }
+
+  button {
+    margin-left: 12px;
+    padding: 16px 45px;
+  }
+}
+
+.sheet {
+  padding-top: 15px;
+
+  border-radius: 8px;
+  background-color: $white;
+  box-shadow: $shadow-light;
+}
+
+.sheet__title {
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
+.sheet__content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin-top: 8px;
+  padding-top: 18px;
+  padding-right: 18px;
+  padding-left: 18px;
+
+  border-top: 1px solid rgba($green-500, 0.1);
+}
+</style>
