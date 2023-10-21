@@ -13,8 +13,9 @@
             class="visually-hidden"
             type="radio"
             name="dought"
+            :checked="modelValue === dough.id"
             :value="dough.id"
-            checked
+            @input="emit('update:modelValue', +$event.target.value)"
           />
           <b>{{ dough.name }}</b>
           <span>{{ dough.description }}</span>
@@ -25,12 +26,12 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+const emit = defineEmits(["update:modelValue"]);
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    default: 0,
   },
   types: {
     type: Array,

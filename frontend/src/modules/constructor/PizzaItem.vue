@@ -1,27 +1,49 @@
 <template>
-  <AppDrop @drop="test">
-    <div class="content__constructor">
-      <div class="pizza pizza--foundation--big-tomato">
-        <div class="pizza__wrapper">
-          <div class="pizza__filling pizza__filling--ananas"></div>
-          <div class="pizza__filling pizza__filling--bacon"></div>
-          <div class="pizza__filling pizza__filling--cheddar"></div>
-        </div>
+  <div class="content__constructor">
+    <div :class="getPizzaClass()">
+      <div class="pizza__wrapper">
+        <div
+          v-for="ingredient in displayedIngredients"
+          :key="ingredient[0]"
+          :class="getIngredientClass(ingredient)"
+        ></div>
       </div>
     </div>
-  </AppDrop>
+  </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-import AppDrop from "@/common/components/AppDrop.vue";
+import { computed } from "vue";
+import sauces from "@/common/data/sauces.js";
+import doughSizes from "@/common/data/doughSizes.js";
+import ingredients from "@/common/data/ingredients.js";
 
-defineProps({
-  modelValue: {
-    type: String,
-    default: "",
+const props = defineProps({
+  params: {
+    type: Object,
+    default: () => {},
   },
 });
+const displayedIngredients = computed(() =>
+  Object.entries(props.params.products)
+);
+
+const getPizzaClass = () =>
+  `pizza pizza--foundation--${doughSizes[props.params.dough]}-${
+    sauces[props.params.sauce]
+  }`;
+const getIngredientClass = (ingredient) => {
+  const countClass =
+    ingredient[1] === 2
+      ? "pizza__filling--second"
+      : ingredient[1] === 3
+      ? "pizza__filling--third"
+      : "";
+  const foodClass = ingredient[1]
+    ? `pizza__filling--${ingredients[ingredient[0]]} `
+    : "";
+  return "pizza__filling " + foodClass + countClass;
+};
 </script>
 
 <style lang="scss" scoped>

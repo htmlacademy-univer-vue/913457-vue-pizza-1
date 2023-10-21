@@ -14,6 +14,8 @@
             type="radio"
             name="diameter"
             :value="size.id"
+            :checked="size.id === modelValue"
+            @input="emit('update:modelValue', +$event.target.value)"
           />
           <span>{{ size.name }}</span>
         </label>
@@ -23,12 +25,12 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+const emit = defineEmits(["update:modelValue"]);
 
 defineProps({
   modelValue: {
-    type: String,
-    default: "",
+    type: Number,
+    default: 0,
   },
   sizes: {
     type: Array,
