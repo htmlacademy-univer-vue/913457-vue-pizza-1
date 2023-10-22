@@ -14,30 +14,7 @@
           }}</span>
         </AppDrag>
 
-        <div class="counter counter--orange ingredients__counter">
-          <button
-            type="button"
-            class="counter__button counter__button--minus"
-            :disabled="!counts[ingredient.id]"
-            @click="decreaseCount(ingredient.id)"
-          >
-            <span class="visually-hidden">Меньше</span>
-          </button>
-          <input
-            type="text"
-            name="counter"
-            class="counter__input"
-            :value="counts[ingredient.id] ?? 0"
-          />
-          <button
-            type="button"
-            class="counter__button counter__button--plus"
-            :disabled="counts[ingredient.id] === 3"
-            @click="increaseCount(ingredient.id)"
-          >
-            <span class="visually-hidden">Больше</span>
-          </button>
-        </div>
+        <AppCounter v-model="counts[ingredient.id]" />
       </li>
     </ul>
   </div>
@@ -47,6 +24,7 @@
 import { defineProps, reactive, watch } from "vue";
 import products from "@/common/data/ingredients.js";
 import AppDrag from "@/common/components/AppDrag.vue";
+import AppCounter from "@/common/components/AppCounter.vue";
 
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps({
@@ -69,12 +47,7 @@ watch(
 const getClassName = (id) => "filling--" + products[id];
 
 let counts = reactive({});
-const decreaseCount = (id) => {
-  counts[id] = counts[id] ? --counts[id] : 0;
+watch(counts, () => {
   emit("update:modelValue", counts);
-};
-const increaseCount = (id) => {
-  counts[id] = counts[id] ? ++counts[id] : 1;
-  emit("update:modelValue", counts);
-};
+});
 </script>
