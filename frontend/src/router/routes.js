@@ -17,22 +17,23 @@ export const routes = [
         children: [],
       },
       {
-        path: "orders",
-        name: "OrdersView",
-        component: () => import("../views/OrdersView.vue"),
-        children: [],
-      },
-      {
         path: "profile",
         name: "ProfileView",
         component: () => import("../views/ProfileView.vue"),
-        children: [],
-      },
-      {
-        path: "user",
-        name: "UserView",
-        component: () => import("../views/UserView.vue"),
-        children: [],
+        children: [
+          {
+            path: "orders",
+            name: "OrdersView",
+            component: () => import("../views/OrdersView.vue"),
+            children: [],
+          },
+          {
+            path: "",
+            name: "UserView",
+            component: () => import("../views/UserView.vue"),
+            children: [],
+          },
+        ],
       },
     ],
   },
