@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__logo">
-      <a href="index.html" class="logo">
+      <a href="/" class="logo">
         <img
           src="@/assets/img/logo.svg"
           alt="V!U!E! Pizza logo"
@@ -11,7 +11,7 @@
       </a>
     </div>
     <div class="header__cart">
-      <a href="cart.html">0 ₽</a>
+      <a href="/cart">0 ₽</a>
     </div>
     <div class="header__user">
       <router-link to="/login" class="header__login">Войти</router-link>
@@ -57,7 +57,7 @@
 
     color: $white;
     background-color: $green-500;
-    background-image: url("../src/assets/img/cart.svg");
+    background-image: url("@/assets/img/cart.svg");
     background-repeat: no-repeat;
     background-position: 20px center;
     background-size: 29px 27px;
@@ -139,7 +139,7 @@
     content: "";
     vertical-align: middle;
 
-    background: url("../src/assets/img/login.svg") no-repeat center;
+    background: url("@/assets/img/login.svg") no-repeat center;
     background-size: auto 50%;
   }
 }
@@ -157,7 +157,7 @@
     content: "";
     vertical-align: middle;
 
-    background: url("../src/assets/img/login.svg") no-repeat center;
+    background: url("@/assets/img/login.svg") no-repeat center;
     background-size: auto 50%;
   }
 }

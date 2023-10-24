@@ -23,3 +23,38 @@
 
   border-top: 1px solid rgba($green-500, 0.1);
 }
+
+.container {
+  width: 770px;
+  margin: 0 auto;
+}
+
+.content {
+  padding-top: 20px;
+}
+
+.layout {
+  &__content {
+    padding-top: 22px;
+    padding-right: 2.12%;
+    padding-left: 200px;
+  }
+
+  &__title {
+    margin-bottom: 27px;
+
+  }
+
+  &__button {
+    margin-top: 40px;
+
+    button {
+      padding: 12px 23px;
+    }
+  }
+
+  &__address {
+    margin-top: 16px;
+
+  }
+}
