@@ -14,9 +14,7 @@
       <a href="cart.html">0 ₽</a>
     </div>
     <div class="header__user">
-      <a href="#" class="header__login">
-        <span>Войти</span>
-      </a>
+      <router-link to="/login" class="header__login">Войти</router-link>
     </div>
   </header>
 </template>
@@ -147,6 +145,8 @@
 }
 
 .header__login {
+  color: white;
+
   &::after {
     display: inline-block;
 
