@@ -30,26 +30,7 @@
               </div>
             </div>
 
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="1"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
+            <AppCounter class-name="counter__button--orange" />
 
             <div class="cart-list__price">
               <b>782 ₽</b>
@@ -81,26 +62,7 @@
               </div>
             </div>
 
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="2"
-              />
-              <button
-                type="button"
-                class="counter__button counter__button--plus counter__button--orange"
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
+            <AppCounter class-name="counter__button--orange" />
 
             <div class="cart-list__price">
               <b>782 ₽</b>
@@ -126,26 +88,7 @@
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
+                <AppCounter class-name="counter__button--orange" />
 
                 <div class="additional-list__price">
                   <b>× 56 ₽</b>
@@ -164,26 +107,7 @@
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
+                <AppCounter class-name="counter__button--orange" />
 
                 <div class="additional-list__price">
                   <b>× 30 ₽</b>
@@ -202,26 +126,7 @@
               </p>
 
               <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="counter__button counter__button--plus counter__button--orange"
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
+                <AppCounter class-name="counter__button--orange" />
 
                 <div class="additional-list__price">
                   <b>× 56 ₽</b>
@@ -278,9 +183,9 @@
     </main>
     <section class="footer">
       <div class="footer__more">
-        <a href="#" class="button button--border button--arrow"
-          >Хочу еще одну</a
-        >
+        <router-link to="/" class="button button--border button--arrow">
+          Хочу еще одну
+        </router-link>
       </div>
       <p class="footer__text">
         Перейти к конструктору<br />чтоб собрать ещё одну пиццу
@@ -295,6 +200,10 @@
     </section>
   </form>
 </template>
+
+<script setup>
+import AppCounter from "@/common/components/AppCounter.vue";
+</script>
 
 <style lang="scss">
 @import "@/assets/scss/app.scss";
