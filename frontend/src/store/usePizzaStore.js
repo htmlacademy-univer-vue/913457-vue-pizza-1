@@ -22,5 +22,12 @@ export const usePizzaStore = defineStore("pizza", {
       );
     },
   },
-  actions: {},
+  actions: {
+    setSimpleParameter(name, value) {
+      this[name] = value;
+    },
+    setIngredients(ingredient) {
+      this.ingredients.push(ingredient);
+    },
+  },
 });

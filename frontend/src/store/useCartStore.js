@@ -15,5 +15,12 @@ export const useCartStore = defineStore("cart", {
       return pizzasPrice + miscPrice;
     },
   },
-  actions: {},
+  actions: {
+    addPizza(pizza) {
+      this.pizzas.push(pizza);
+    },
+    addMisc(misc) {
+      this.misc.push(misc);
+    },
+  },
 });
