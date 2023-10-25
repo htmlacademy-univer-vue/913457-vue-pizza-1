@@ -2,7 +2,26 @@ import { defineStore } from "pinia";
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
-    addresses: [],
+    addresses: [
+      {
+        id: 0,
+        name: "Тест",
+        street: "Невский пр.",
+        building: "22",
+        flat: "46",
+        comment: "string",
+        userId: "string",
+      },
+      {
+        id: 1,
+        name: "Тест",
+        street: "Невский пр.",
+        building: "22",
+        flat: "46",
+        comment: "string",
+        userId: "string",
+      },
+    ],
   }),
   getters: {},
   actions: {
@@ -13,6 +32,19 @@ export const useProfileStore = defineStore("profile", {
     },
     async setAddress(address) {
       this.addresses.push(address);
+    },
+    async updateAddress(updatedAddress) {
+      const targetIndex = this.addresses.findIndex(
+        (address) => address.id === updatedAddress.id
+      );
+
+      this.addresses.splice(targetIndex, 1, updatedAddress);
+    },
+    async deleteAddress(id) {
+      const targetIndex = this.addresses.findIndex(
+        (address) => address.id === id
+      );
+      this.addresses.splice(targetIndex, 1);
     },
   },
 });
