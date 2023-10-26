@@ -39,3 +39,12 @@ defineProps({
   },
 });
 </script>
+
+<style lang="scss">
+.content__dough {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+</style>
