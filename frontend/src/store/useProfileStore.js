@@ -2,10 +2,12 @@ import { defineStore } from "pinia";
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
+    userInfo: {},
+    authorized: true,
     addresses: [
       {
         id: 0,
-        name: "Тест",
+        name: "Тест1",
         street: "Невский пр.",
         building: "22",
         flat: "46",
@@ -14,10 +16,10 @@ export const useProfileStore = defineStore("profile", {
       },
       {
         id: 1,
-        name: "Тест",
+        name: "Тест2",
         street: "Невский пр.",
-        building: "22",
-        flat: "46",
+        building: "23",
+        flat: "42",
         comment: "string",
         userId: "string",
       },
@@ -25,6 +27,16 @@ export const useProfileStore = defineStore("profile", {
   }),
   getters: {},
   actions: {
+    setUserInfo(user) {
+      this.userInfo = user;
+    },
+    authorize(form) {
+      console.log(form);
+      this.authorized = true;
+    },
+    logout() {
+      this.authorized = false;
+    },
     async getAddresses() {
       const response = await fetch("url");
       const result = await response.json();

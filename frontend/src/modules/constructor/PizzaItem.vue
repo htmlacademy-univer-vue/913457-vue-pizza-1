@@ -25,24 +25,25 @@ const props = defineProps({
   },
 });
 const displayedIngredients = computed(() =>
-  Object.entries(props.params.products)
+  props.params.products.filter((product) => product.name)
 );
 
 const getPizzaClass = () =>
-  `pizza pizza--foundation--${doughSizes[props.params.dough]}-${
-    sauces[props.params.sauce]
+  `pizza pizza--foundation--${doughSizes[props.params.dough.id]}-${
+    sauces[props.params.sauce.id]
   }`;
 const getIngredientClass = (ingredient) => {
-  const countClass =
-    ingredient[1] === 2
-      ? "pizza__filling--second"
-      : ingredient[1] === 3
-      ? "pizza__filling--third"
-      : "";
-  const foodClass = ingredient[1]
-    ? `pizza__filling--${ingredients[ingredient[0]]} `
+  const countClasses = {
+    1: "",
+    2: "pizza__filling--second",
+    3: "pizza__filling--third",
+  };
+  const countClass = countClasses[ingredient.count];
+  return ingredient.count
+    ? "pizza__filling " +
+        `pizza__filling--${ingredients[ingredient.id]} ` +
+        countClass
     : "";
-  return "pizza__filling " + foodClass + countClass;
 };
 </script>
 

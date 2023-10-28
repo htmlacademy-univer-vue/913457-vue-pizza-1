@@ -8,7 +8,7 @@
       type="button"
       class="counter__button counter__button--minus"
       :disabled="modelValue === min"
-      @click="emit('update:modelValue', modelValue - 1)"
+      @click="updateValue(modelValue - 1)"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -22,7 +22,7 @@
       type="button"
       :disabled="modelValue === max"
       :class="`counter__button counter__button--plus ${className}`"
-      @click="emit('update:modelValue', modelValue + 1)"
+      @click="updateValue(modelValue + 1)"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "change"]);
 defineProps({
   modelValue: {
     type: Number,
@@ -49,6 +49,11 @@ defineProps({
     default: "",
   },
 });
+
+const updateValue = (val) => {
+  emit("change", val);
+  emit("update:modelValue", val);
+};
 </script>
 
 <style lang="scss">

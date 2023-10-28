@@ -4,9 +4,37 @@
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <DoughSelect v-model="pizzaParams.dough" :types="doughTypes" />
+        <div class="content__dough">
+          <div class="sheet">
+            <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
-        <SizeSelect v-model="pizzaParams.size" :sizes="sizes" />
+            <div class="sheet__content dough">
+              <label
+                v-for="dough in types"
+                :key="dough.id"
+                class="dough__input dough__input--light"
+              >
+                <DoughSelect v-model="pizzaParams.dough" :dough="dough" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="content__diameter">
+          <div class="sheet">
+            <h2 class="title title--small sheet__title">Выберите размер</h2>
+
+            <div class="sheet__content diameter">
+              <label
+                v-for="size in sizes"
+                :key="size.id"
+                class="diameter__input diameter__input--small"
+              >
+                <SizeSelect v-model="pizzaParams.size" :size="size" />
+              </label>
+            </div>
+          </div>
+        </div>
 
         <div class="content__ingredients">
           <div class="sheet">
@@ -15,12 +43,35 @@
             </h2>
 
             <div class="sheet__content ingredients">
-              <SauceSelect v-model="pizzaParams.sauce" :sauces="sauces" />
+              <div class="ingredients__sauce">
+                <p>Основной соус:</p>
 
-              <IngredientsSelect
-                v-model="pizzaParams.products"
-                :ingredients="ingredients"
-              />
+                <label
+                  v-for="sauce in sauces"
+                  :key="sauce.id"
+                  class="radio ingredients__input"
+                >
+                  <SauceSelect v-model="pizzaParams.sauce" :sauce="sauce" />
+                </label>
+              </div>
+
+              <div class="ingredients__filling">
+                <p>Начинка:</p>
+
+                <ul class="ingredients__list">
+                  <li
+                    v-for="(ingredient, index) in ingredients"
+                    :key="ingredient.id"
+                    class="ingredients__item"
+                  >
+                    <IngredientsSelect
+                      v-model="pizzaParams.products[index]"
+                      :index="index"
+                      :ingredient="ingredient"
+                    />
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -29,6 +80,7 @@
           <label class="input">
             <span class="visually-hidden">Название пиццы</span>
             <input
+              v-model="pizzaParams.name"
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
@@ -41,7 +93,14 @@
 
           <div class="content__result">
             <p>Итого: {{ sum }} ₽</p>
-            <button type="button" class="button" disabled>Готовьте!</button>
+            <button
+              type="button"
+              class="button"
+              :disabled="isDisabled"
+              @click="addPizza"
+            >
+              Готовьте!
+            </button>
           </div>
         </div>
       </div>
@@ -51,10 +110,13 @@
 
 <script setup>
 import { reactive, computed } from "vue";
+import { useCartStore } from "@/store/useCartStore";
 import ingredients from "@/mocks/ingredients.json";
-import sizes from "@/mocks/sizes.json";
 import sauces from "@/mocks/sauces.json";
-import doughTypes from "@/mocks/dough.json";
+import sizes from "@/mocks/sizes.json";
+import types from "@/mocks/dough.json";
+
+import { useRoute } from "vue-router";
 
 import DoughSelect from "@/modules/constructor/DoughSelect.vue";
 import SizeSelect from "@/modules/constructor/SizeSelect.vue";
@@ -63,46 +125,58 @@ import IngredientsSelect from "@/modules/constructor/IngredientsSelect.vue";
 import PizzaItem from "@/modules/constructor/PizzaItem.vue";
 import AppDrop from "@/common/components/AppDrop.vue";
 
-const getIngredientPrice = (targetId) => {
-  return ingredients.find((ingredient) => ingredient.id === +targetId).price;
-};
 const sum = computed(() => {
-  const multiplier = sizes.find(
-    (size) => size.id === pizzaParams.size
-  ).multiplier;
-  const saucePrice = sauces.find(
-    (sauce) => sauce.id === pizzaParams.sauce
-  ).price;
-  const doughPrice = doughTypes.find(
-    (dough) => dough.id === pizzaParams.dough
-  ).price;
+  const ingredientsTotalPrice = pizzaParams.products
+    .filter((product) => product.name)
+    .reduce((sum, ingredient) => sum + ingredient.price * ingredient.count, 0);
 
-  const products = Object.entries(pizzaParams.products);
+  const multiplier = pizzaParams.size.multiplier;
 
-  let ingredientTotalPrice = 0;
-  products.forEach((product) => {
-    const price = getIngredientPrice(product[0]) * product[1];
-
-    ingredientTotalPrice += price;
-  });
-
-  return multiplier * (saucePrice + doughPrice + ingredientTotalPrice);
+  return (
+    multiplier *
+    (pizzaParams.sauce.price + pizzaParams.dough.price + ingredientsTotalPrice)
+  );
 });
 
-const pizzaParams = reactive({
-  dough: 1,
-  size: 2,
-  sauce: 2,
-  products: reactive({}),
-});
+const cartStore = useCartStore();
+const route = useRoute();
+const { id } = route.params;
+let pizzaParams = reactive(
+  id
+    ? cartStore.pizzas.find((pizza) => pizza.id === +id)
+    : {
+        dough: types[0],
+        size: sizes[0],
+        sauce: sauces[0],
+        products: reactive(ingredients.map(() => ({}))),
+        name: "",
+        count: 1,
+        id: Date.now(),
+      }
+);
 
-const dropped = (body) => {
-  if (!pizzaParams.products[body.id]) {
-    pizzaParams.products[body.id] = 1;
-  } else if (pizzaParams.products[body.id] < 3) {
-    pizzaParams.products[body.id] += 1;
+const dropped = ({ ingredient, index }) => {
+  let target = pizzaParams.products[index];
+
+  if (target.name) {
+    target.count = target.count === 3 ? target.count : ++target.count;
+  } else {
+    pizzaParams.products[index] = { ...ingredient, count: 1 };
   }
 };
+
+const addPizza = () => {
+  const operation = id ? "updatePizza" : "addPizza";
+  if (id) {
+    cartStore[operation]({ ...pizzaParams, price: sum.value });
+  } else {
+    cartStore[operation]({ ...pizzaParams, price: sum.value });
+  }
+};
+
+const isDisabled = computed(
+  () => !pizzaParams.products.filter((product) => product.count).length
+);
 </script>
 
 <style lang="scss" scoped>
@@ -131,6 +205,11 @@ const dropped = (body) => {
   margin-bottom: 15px;
 }
 
+.content__diameter {
+  width: 373px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
 .content__pizza {
   width: 373px;
   margin-top: 15px;

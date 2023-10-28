@@ -117,7 +117,7 @@ const props = defineProps({
 });
 
 const editedAddressId = ref(-1);
-let editedAddress = reactive(JSON.parse(JSON.stringify(props.address)));
+let editedAddress = reactive({ ...props.address });
 
 const save = () => {
   editedAddressId.value = -1;

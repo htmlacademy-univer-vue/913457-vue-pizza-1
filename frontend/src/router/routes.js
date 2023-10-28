@@ -5,8 +5,14 @@ export const routes = [
     component: () => import("../layouts/AppLayout.vue"),
     children: [
       {
-        path: "",
+        path: "/",
         name: "HomeView",
+        component: () => import("../views/HomeView.vue"),
+        children: [],
+      },
+      {
+        path: "/:id",
+        name: "CreatePizza",
         component: () => import("../views/HomeView.vue"),
         children: [],
       },
