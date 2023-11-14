@@ -1,27 +1,13 @@
 <template>
-  <div class="content__diameter">
-    <div class="sheet">
-      <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-      <div class="sheet__content diameter">
-        <label
-          v-for="size in sizes"
-          :key="size.id"
-          class="diameter__input diameter__input--small"
-        >
-          <input
-            class="visually-hidden"
-            type="radio"
-            name="diameter"
-            :value="size.id"
-            :checked="size.id === modelValue"
-            @input="emit('update:modelValue', +$event.target.value)"
-          />
-          <span>{{ size.name }}</span>
-        </label>
-      </div>
-    </div>
-  </div>
+  <input
+    class="visually-hidden"
+    type="radio"
+    name="diameter"
+    :value="size.id"
+    :checked="size.id === modelValue.id"
+    @input="emit('update:modelValue', size)"
+  />
+  <span>{{ size.name }}</span>
 </template>
 
 <script setup>
@@ -29,20 +15,12 @@ const emit = defineEmits(["update:modelValue"]);
 
 defineProps({
   modelValue: {
-    type: Number,
-    default: 0,
+    type: Object,
+    default: () => ({}),
   },
-  sizes: {
-    type: Array,
-    default: () => [],
+  size: {
+    type: Object,
+    default: () => ({}),
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.content__diameter {
-  width: 373px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-</style>

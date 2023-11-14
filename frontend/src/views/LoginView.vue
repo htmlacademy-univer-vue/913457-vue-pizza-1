@@ -6,24 +6,57 @@
     <div class="sign-form__title">
       <h1 class="title title--small">Авторизуйтесь на сайте</h1>
     </div>
-    <form action="test.html" method="post">
+    <form action="test.html" method="post" @submit.prevent="login">
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
-          <input type="email" name="email" placeholder="example@mail.ru" />
+          <input
+            v-model="user.email"
+            type="email"
+            name="email"
+            placeholder="example@mail.ru"
+          />
         </label>
       </div>
 
       <div class="sign-form__input">
         <label class="input">
           <span>Пароль</span>
-          <input type="password" name="pass" placeholder="***********" />
+          <input
+            v-model="user.password"
+            type="password"
+            name="pass"
+            placeholder="***********"
+          />
         </label>
       </div>
       <button type="submit" class="button">Авторизоваться</button>
     </form>
   </div>
 </template>
+
+<script setup>
+import { useProfileStore } from "@/store/useProfileStore";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+
+const profileStore = useProfileStore();
+const router = useRouter();
+
+const user = reactive({
+  email: "",
+  password: "",
+});
+
+const login = () => {
+  try {
+    profileStore.authorize(user);
+    router.push("/profile");
+  } catch (error) {
+    console.warn(error);
+  }
+};
+</script>
 
 <style lang="scss">
 @import "@/assets/scss/app.scss";
