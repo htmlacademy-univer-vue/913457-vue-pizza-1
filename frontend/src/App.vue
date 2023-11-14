@@ -2,6 +2,27 @@
   <router-view />
 </template>
 
+<script setup>
+import { getToken, removeToken } from "@/services/auth/auth.js";
+import { useAuthStore } from "@/store/useAuthStore.js";
+
+const token = getToken();
+
+const initAuth = async () => {
+  if (token) {
+    try {
+      const authStore = useAuthStore();
+      await authStore.setUserInfo();
+    } catch (e) {
+      removeToken();
+      console.log(e);
+    }
+  }
+};
+
+initAuth();
+</script>
+
 <style lang="scss">
 @import "@/assets/scss/app.scss";
 body {

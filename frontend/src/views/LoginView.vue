@@ -15,6 +15,7 @@
             type="email"
             name="email"
             placeholder="example@mail.ru"
+            required
           />
         </label>
       </div>
@@ -27,34 +28,38 @@
             type="password"
             name="pass"
             placeholder="***********"
+            required
           />
         </label>
       </div>
       <button type="submit" class="button">Авторизоваться</button>
     </form>
+    <div v-if="hasWarning">Неправильный логин или пароль!</div>
   </div>
 </template>
 
 <script setup>
-import { useProfileStore } from "@/store/useProfileStore";
-import { reactive } from "vue";
+import { useAuthStore } from "@/store/useAuthStore";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const profileStore = useProfileStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const user = reactive({
-  email: "",
-  password: "",
+  email: "user@example.com",
+  password: "user@example.com",
 });
 
-const login = () => {
-  try {
-    profileStore.authorize(user);
+const hasWarning = ref(false);
+const login = async () => {
+  const authed = await authStore.authorize(user);
+
+  if (authed) {
     router.push("/profile");
-  } catch (error) {
-    console.warn(error);
   }
+
+  hasWarning.value = !authed;
 };
 </script>
 

@@ -15,7 +15,7 @@
         >{{ cartStore.totalPrice }} ₽</router-link
       >
     </div>
-    <div v-if="!profileStore.authorized" class="header__user">
+    <div v-if="!authStore.authorized" class="header__user">
       <router-link to="/login" class="header__login">Войти</router-link>
     </div>
     <div v-else class="header__user">
@@ -31,7 +31,7 @@
         </picture>
         <span>Василий Ложкин</span>
       </router-link>
-      <router-link to="/" class="header__logout" @click="profileStore.logout"
+      <router-link to="/" class="header__logout" @click="authStore.logout"
         ><span>Выйти</span></router-link
       >
     </div>
@@ -40,10 +40,10 @@
 
 <script setup>
 import { useCartStore } from "@/store/useCartStore";
-import { useProfileStore } from "@/store/useProfileStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const cartStore = useCartStore();
-const profileStore = useProfileStore();
+const authStore = useAuthStore();
 </script>
 
 <style lang="scss" scoped>
