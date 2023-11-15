@@ -6,11 +6,7 @@
 
     <p v-if="!commonStore.orders.length">Заказов нет</p>
     <div v-else>
-      <section
-        v-for="order of commonStore.getOrders"
-        :key="order.id"
-        class="sheet order"
-      >
+      <section v-for="order of orders" :key="order.id" class="sheet order">
         <OrderItem
           :order="order"
           @delete="deleteOrder(order.id)"
@@ -26,6 +22,7 @@ import OrderItem from "../modules/orders/OrderItem.vue";
 import { useCommonStore } from "@/store/useCommonStore";
 import { useCartStore } from "@/store/useCartStore";
 import { useRouter } from "vue-router";
+import { computed } from "vue";
 
 const commonStore = useCommonStore();
 const cartStore = useCartStore();
@@ -37,7 +34,11 @@ const repeatOrder = (order) => {
   router.push("/cart");
 };
 
+commonStore.getAllOrders();
+
 const deleteOrder = (id) => {
   commonStore.deleteOrder(id);
 };
+
+const orders = computed(() => commonStore.getOrders);
 </script>

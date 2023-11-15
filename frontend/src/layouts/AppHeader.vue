@@ -31,7 +31,7 @@
         </picture>
         <span>Василий Ложкин</span>
       </router-link>
-      <router-link to="/" class="header__logout" @click="authStore.logout"
+      <router-link to="/" class="header__logout" @click="logout"
         ><span>Выйти</span></router-link
       >
     </div>
@@ -41,9 +41,16 @@
 <script setup>
 import { useCartStore } from "@/store/useCartStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useProfileStore } from "@/store/useProfileStore";
 
 const cartStore = useCartStore();
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
+
+const logout = () => {
+  authStore.logout();
+  profileStore.cleanAddresses();
+};
 </script>
 
 <style lang="scss" scoped>

@@ -13,8 +13,13 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     async setUserInfo() {
-      const { data } = await GET("/whoAmI");
-      this.userInfo = data;
+      const { data, error } = await GET("/whoAmI");
+
+      if (error) {
+        this.logout();
+      } else {
+        this.userInfo = data;
+      }
     },
     async authorize(body) {
       const { data, error } = await POST("/login", { body });

@@ -8,16 +8,16 @@
       <picture>
         <img
           src="@/assets/img/users/user5@2x.jpg"
-          alt="Василий Ложкин"
+          :alt="authStore.userInfo.name"
           width="72"
           height="72"
         />
       </picture>
       <div class="user__name">
-        <span>Василий Ложкин</span>
+        <span>{{ authStore.userInfo.name }}</span>
       </div>
       <p class="user__phone">
-        Контактный телефон: <span>+7 999-999-99-99</span>
+        Контактный телефон: <span>{{ authStore.userInfo.phone }}</span>
       </p>
     </div>
 
@@ -30,7 +30,7 @@
         :address="address"
         :index="index + 1"
         @save="profileStore.updateAddress"
-        @delete="() => profileStore.deleteAddress(address.id)"
+        @delete="profileStore.deleteAddress(address.id)"
       />
     </div>
 
@@ -60,13 +60,17 @@
 import { ref } from "vue";
 import AddressItem from "@/modules/profile/AddressItem.vue";
 import { useProfileStore } from "@/store/useProfileStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const addingMode = ref(false);
 
 const profileStore = useProfileStore();
+const authStore = useAuthStore();
+
+profileStore.getAddresses();
 
 const addAddress = (address) => {
-  profileStore.setAddress(address);
+  profileStore.setAddress({ ...address, userId: authStore.userInfo.id });
   addingMode.value = false;
 };
 </script>
