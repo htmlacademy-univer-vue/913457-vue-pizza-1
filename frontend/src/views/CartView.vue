@@ -115,6 +115,7 @@ import { useProfileStore } from "@/store/useProfileStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import OrderedPizza from "@/modules/cart/OrderedPizza.vue";
 import OrderedMisc from "@/modules/cart/OrderedMisc.vue";
+import { useRouter } from "vue-router";
 
 const cartStore = useCartStore();
 const commonStore = useCommonStore();
@@ -134,6 +135,7 @@ const selectedAddress = reactive({
   flat: "",
 });
 
+const router = useRouter();
 const newPhone = ref(authStore.userInfo.phone);
 const createOrder = async () => {
   const userId = authStore.userInfo.id;
@@ -163,6 +165,8 @@ const createOrder = async () => {
 
   chosenWayToGet.value = { name: "Получу сам", id: -1 };
   cartStore.cleanCart();
+
+  router.push("/success");
 };
 
 const options = computed(() => {

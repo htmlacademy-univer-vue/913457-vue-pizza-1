@@ -109,7 +109,7 @@ import { reactive, computed } from "vue";
 import { useCartStore } from "@/store/useCartStore";
 import { useCommonStore } from "@/store/useCommonStore";
 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import DoughSelect from "@/modules/constructor/DoughSelect.vue";
 import SizeSelect from "@/modules/constructor/SizeSelect.vue";
@@ -151,6 +151,7 @@ const dropped = ({ ingredient, index }) => {
   }
 };
 
+const router = useRouter();
 const addPizza = () => {
   const operation = id ? "updatePizza" : "addPizza";
   if (id) {
@@ -158,6 +159,8 @@ const addPizza = () => {
   } else {
     cartStore[operation]({ ...pizzaParams, price: sum.value });
   }
+
+  router.push("/cart");
 };
 
 const isDisabled = computed(
