@@ -39,9 +39,10 @@
 
               <select v-model="chosenWayToGet" name="test" class="select">
                 <option
-                  v-for="option, index of options"
+                  v-for="(option, index) of options"
                   :key="option"
-                  :value="index">
+                  :value="index"
+                >
                   {{ option }}
                 </option>
               </select>
@@ -58,7 +59,8 @@
               <div
                 v-for="item of addressInfo"
                 :key="item.name"
-                :class="`cart-form__input ${item.class}`">
+                :class="`cart-form__input ${item.class}`"
+              >
                 <label class="input">
                   <span>{{ item.label }}</span>
                   <input
@@ -142,36 +144,31 @@ const createOrder = async () => {
   cartStore.cleanCart();
 };
 
-const options = computed( () => {
-  const list = profileStore.addresses.map( ( address ) => address.name )
-  return [
-    'Получу сам',
-    'Новый адрес',
-    ...list,    
-  ]
-})
+const options = computed(() => {
+  const list = profileStore.addresses.map((address) => address.name);
+  return ["Получу сам", "Новый адрес", ...list];
+});
 
 const addressInfo = [
   {
-    name: 'street',
-    label: 'Улица*',
-    class: '',
+    name: "street",
+    label: "Улица*",
+    class: "",
     required: true,
   },
   {
-    name: 'house',
-    label: 'Дом*',
-    class: 'cart-form__input--small',
+    name: "house",
+    label: "Дом*",
+    class: "cart-form__input--small",
     required: true,
   },
   {
-    name: 'flat',
-    label: 'Квартира',
-    class: 'cart-form__input--small',
+    name: "flat",
+    label: "Квартира",
+    class: "cart-form__input--small",
     required: false,
   },
-]
-
+];
 </script>
 
 <style lang="scss">
