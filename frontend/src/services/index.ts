@@ -1,8 +1,9 @@
 import createClient from "openapi-fetch";
 import { paths } from "./api/openapi";
 import { AUTH_KEY } from "./auth/auth.js";
+import { BACKEND_URL } from "@/common/data/constants";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = BACKEND_URL;
 
 export const { GET, PUT, POST, DELETE } = createClient<paths>({
   baseUrl,

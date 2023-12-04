@@ -1,50 +1,40 @@
 import { defineStore } from "pinia";
+import { GET, POST, DELETE, PUT } from "../services";
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
-    addresses: [
-      {
-        id: 0,
-        name: "Тест1",
-        street: "Невский пр.",
-        building: "22",
-        flat: "46",
-        comment: "string",
-        userId: "string",
-      },
-      {
-        id: 1,
-        name: "Тест2",
-        street: "Невский пр.",
-        building: "23",
-        flat: "42",
-        comment: "string",
-        userId: "string",
-      },
-    ],
+    addresses: [],
   }),
   getters: {},
   actions: {
     async getAddresses() {
-      const response = await fetch("url");
-      const result = await response.json();
-      this.addresses = result;
+      const { data } = await GET("/addresses");
+      if (data) {
+        this.addresses = data;
+      }
     },
-    async setAddress(address) {
-      this.addresses.push(address);
+    async setAddress(body) {
+      await POST("/addresses", { body });
+      this.addresses.push(body);
     },
-    async updateAddress(updatedAddress) {
-      const targetIndex = this.addresses.findIndex(
-        (address) => address.id === updatedAddress.id
-      );
+    async updateAddress(body) {
+      await PUT("/addresses/{id}", { body, params: { path: { id: body.id } } });
 
-      this.addresses.splice(targetIndex, 1, updatedAddress);
+      const targetIndex = this.addresses.findIndex(
+        (address) => address.id === body.id
+      );
+      this.addresses.splice(targetIndex, 1, body);
     },
     async deleteAddress(id) {
+      await DELETE("/addresses/{id}", { params: { path: { id } } });
+
       const targetIndex = this.addresses.findIndex(
         (address) => address.id === id
       );
       this.addresses.splice(targetIndex, 1);
+    },
+    cleanAddresses() {
+      this.addresses = [];
     },
   },
 });

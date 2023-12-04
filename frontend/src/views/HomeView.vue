@@ -1,6 +1,6 @@
 <template>
   <main class="content">
-    <form action="#" method="post">
+    <form action="#" method="post" @submit.prevent="addPizza">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
@@ -10,7 +10,7 @@
 
             <div class="sheet__content dough">
               <label
-                v-for="dough in types"
+                v-for="dough in commonStore.dough"
                 :key="dough.id"
                 class="dough__input dough__input--light"
               >
@@ -26,7 +26,7 @@
 
             <div class="sheet__content diameter">
               <label
-                v-for="size in sizes"
+                v-for="size in commonStore.sizes"
                 :key="size.id"
                 class="diameter__input diameter__input--small"
               >
@@ -47,7 +47,7 @@
                 <p>Основной соус:</p>
 
                 <label
-                  v-for="sauce in sauces"
+                  v-for="sauce in commonStore.sauces"
                   :key="sauce.id"
                   class="radio ingredients__input"
                 >
@@ -60,12 +60,12 @@
 
                 <ul class="ingredients__list">
                   <li
-                    v-for="(ingredient, index) in ingredients"
+                    v-for="(ingredient, index) in commonStore.ingredients"
                     :key="ingredient.id"
                     class="ingredients__item"
                   >
                     <IngredientsSelect
-                      v-model="pizzaParams.products[index]"
+                      v-model="pizzaParams.ingredients[index]"
                       :index="index"
                       :ingredient="ingredient"
                     />
@@ -84,6 +84,7 @@
               type="text"
               name="pizza_name"
               placeholder="Введите название пиццы"
+              required
             />
           </label>
 
@@ -93,12 +94,7 @@
 
           <div class="content__result">
             <p>Итого: {{ sum }} ₽</p>
-            <button
-              type="button"
-              class="button"
-              :disabled="isDisabled"
-              @click="addPizza"
-            >
+            <button type="submit" class="button" :disabled="isDisabled">
               Готовьте!
             </button>
           </div>
@@ -111,12 +107,9 @@
 <script setup>
 import { reactive, computed } from "vue";
 import { useCartStore } from "@/store/useCartStore";
-import ingredients from "@/mocks/ingredients.json";
-import sauces from "@/mocks/sauces.json";
-import sizes from "@/mocks/sizes.json";
-import types from "@/mocks/dough.json";
+import { useCommonStore } from "@/store/useCommonStore";
 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import DoughSelect from "@/modules/constructor/DoughSelect.vue";
 import SizeSelect from "@/modules/constructor/SizeSelect.vue";
@@ -125,18 +118,9 @@ import IngredientsSelect from "@/modules/constructor/IngredientsSelect.vue";
 import PizzaItem from "@/modules/constructor/PizzaItem.vue";
 import AppDrop from "@/common/components/AppDrop.vue";
 
-const sum = computed(() => {
-  const ingredientsTotalPrice = pizzaParams.products
-    .filter((product) => product.name)
-    .reduce((sum, ingredient) => sum + ingredient.price * ingredient.count, 0);
+import { getPizzaPrice } from "@/common/helpers/getPizzaPrice.js";
 
-  const multiplier = pizzaParams.size.multiplier;
-
-  return (
-    multiplier *
-    (pizzaParams.sauce.price + pizzaParams.dough.price + ingredientsTotalPrice)
-  );
-});
+const commonStore = useCommonStore();
 
 const cartStore = useCartStore();
 const route = useRoute();
@@ -145,26 +129,29 @@ let pizzaParams = reactive(
   id
     ? cartStore.pizzas.find((pizza) => pizza.id === +id)
     : {
-        dough: types[0],
-        size: sizes[0],
-        sauce: sauces[0],
-        products: reactive(ingredients.map(() => ({}))),
-        name: "",
-        count: 1,
+        dough: commonStore.dough[0],
+        size: commonStore.sizes[0],
+        sauce: commonStore.sauces[0],
+        ingredients: reactive(commonStore.ingredients.map(() => ({}))),
+        name: "Default",
+        quantity: 1,
         id: Date.now(),
       }
 );
+const sum = computed(() => getPizzaPrice(pizzaParams));
 
 const dropped = ({ ingredient, index }) => {
-  let target = pizzaParams.products[index];
+  let target = pizzaParams.ingredients[index];
 
   if (target.name) {
-    target.count = target.count === 3 ? target.count : ++target.count;
+    target.quantity =
+      target.quantity === 3 ? target.quantity : ++target.quantity;
   } else {
-    pizzaParams.products[index] = { ...ingredient, count: 1 };
+    pizzaParams.ingredients[index] = { ...ingredient, quantity: 1 };
   }
 };
 
+const router = useRouter();
 const addPizza = () => {
   const operation = id ? "updatePizza" : "addPizza";
   if (id) {
@@ -172,10 +159,12 @@ const addPizza = () => {
   } else {
     cartStore[operation]({ ...pizzaParams, price: sum.value });
   }
+
+  router.push("/cart");
 };
 
 const isDisabled = computed(
-  () => !pizzaParams.products.filter((product) => product.count).length
+  () => !pizzaParams.ingredients.filter((product) => product.quantity).length
 );
 </script>
 

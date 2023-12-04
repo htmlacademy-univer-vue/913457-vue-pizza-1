@@ -39,21 +39,26 @@
 
               <select v-model="chosenWayToGet" name="test" class="select">
                 <option
-                  v-for="(option, index) of options"
-                  :key="option"
-                  :value="index"
+                  v-for="option of options"
+                  :key="option.id"
+                  :value="option"
                 >
-                  {{ option }}
+                  {{ option.name }}
                 </option>
               </select>
             </label>
 
             <label class="input input--big-label">
               <span>Контактный телефон:</span>
-              <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+              <input
+                v-model="newPhone"
+                type="text"
+                name="tel"
+                placeholder="+7 999-999-99-99"
+              />
             </label>
 
-            <div v-if="chosenWayToGet === 1" class="cart-form__address">
+            <div v-if="chosenWayToGet.id === -2" class="cart-form__address">
               <span class="cart-form__label">Новый адрес:</span>
 
               <div
@@ -64,7 +69,7 @@
                 <label class="input">
                   <span>{{ item.label }}</span>
                   <input
-                    v-model="address[item.name]"
+                    v-model="selectedAddress[item.name]"
                     :required="item.required"
                     type="text"
                     :name="item.name"
@@ -107,46 +112,69 @@ import { ref, reactive, computed } from "vue";
 import { useCartStore } from "@/store/useCartStore";
 import { useCommonStore } from "@/store/useCommonStore";
 import { useProfileStore } from "@/store/useProfileStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import OrderedPizza from "@/modules/cart/OrderedPizza.vue";
 import OrderedMisc from "@/modules/cart/OrderedMisc.vue";
+import { useRouter } from "vue-router";
 
 const cartStore = useCartStore();
 const commonStore = useCommonStore();
 const profileStore = useProfileStore();
+const authStore = useAuthStore();
 
-const chosenWayToGet = ref(1);
+const chosenWayToGet = ref({ name: "Получу сам", id: -1 });
 
-const address = reactive({
+profileStore.getAddresses();
+const buildAddress = (street, building, flat, comment) => {
+  return { street, building, flat, comment };
+};
+
+const selectedAddress = reactive({
   street: "",
   house: "",
   flat: "",
 });
 
+const router = useRouter();
+const newPhone = ref(authStore.userInfo.phone);
 const createOrder = async () => {
-  const orderAddress =
-    chosenWayToGet.value === 0
-      ? "самовывоз"
-      : chosenWayToGet.value === 1
-      ? Object.values(address).join(", ")
-      : profileStore.addresses[0].name;
+  const userId = authStore.userInfo.id;
+  const phone = newPhone.value ?? authStore.userInfo.phone;
+
+  const address =
+    chosenWayToGet.value.id === -1
+      ? undefined
+      : chosenWayToGet.value === -2
+      ? buildAddress(
+          selectedAddress.street,
+          selectedAddress.building,
+          selectedAddress.flat,
+          ""
+        )
+      : chosenWayToGet.value;
 
   const order = {
-    id: Date.now(),
-    orderPizzas: cartStore.pizzas,
-    orderMisc: cartStore.miscs,
-    orderAddress,
-    price: cartStore.totalPrice,
+    userId,
+    phone,
+    address,
+    pizzas: cartStore.orderedPizzas,
+    misc: cartStore.orderedMiscs,
   };
 
   await commonStore.addOrder(JSON.parse(JSON.stringify(order)));
 
-  chosenWayToGet.value = 1;
+  chosenWayToGet.value = { name: "Получу сам", id: -1 };
   cartStore.cleanCart();
+
+  router.push("/success");
 };
 
 const options = computed(() => {
-  const list = profileStore.addresses.map((address) => address.name);
-  return ["Получу сам", "Новый адрес", ...list];
+  return [
+    { name: "Получу сам", id: -1 },
+    { name: "Новый адрес", id: -2 },
+    ...profileStore.addresses,
+  ];
 });
 
 const addressInfo = [

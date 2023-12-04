@@ -6,8 +6,8 @@
   </AppDrag>
 
   <AppCounter
-    :model-value="modelValue.count"
-    @change="emit('update:modelValue', { ...ingredient, count: $event })"
+    :model-value="modelValue.quantity"
+    @change="emit('update:modelValue', { ...ingredient, quantity: $event })"
   />
 </template>
 

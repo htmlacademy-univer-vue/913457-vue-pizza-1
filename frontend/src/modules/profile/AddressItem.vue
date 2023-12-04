@@ -91,7 +91,7 @@
           address.street + ", д. " + address.building + ", кв " + address.flat
         }}
       </p>
-      <small>Позвоните, пожалуйста, от проходной</small>
+      <small>{{ address.comment }}</small>
     </div>
   </div>
 </template>

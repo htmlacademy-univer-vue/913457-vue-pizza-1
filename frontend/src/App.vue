@@ -5,10 +5,22 @@
 <script setup>
 import { getToken, removeToken } from "@/services/auth/auth.js";
 import { useAuthStore } from "@/store/useAuthStore.js";
+import { useCartStore } from "@/store/useCartStore.js";
+import { useCommonStore } from "@/store/useCommonStore.js";
 
 const token = getToken();
 
-const initAuth = async () => {
+const initInfo = async () => {
+  const cartStore = useCartStore();
+  const commonStore = useCommonStore();
+
+  const items = ["ingredients", "dough", "sauces", "sizes"];
+  items.forEach(async (item) => {
+    await commonStore.getItems(item);
+  });
+
+  await cartStore.getMiscs();
+
   if (token) {
     try {
       const authStore = useAuthStore();
@@ -20,7 +32,7 @@ const initAuth = async () => {
   }
 };
 
-initAuth();
+initInfo();
 </script>
 
 <style lang="scss">

@@ -25,7 +25,7 @@ const props = defineProps({
   },
 });
 const displayedIngredients = computed(() =>
-  props.params.products.filter((product) => product.name)
+  props.params.ingredients.filter((product) => product.name)
 );
 
 const getPizzaClass = () =>
@@ -38,8 +38,8 @@ const getIngredientClass = (ingredient) => {
     2: "pizza__filling--second",
     3: "pizza__filling--third",
   };
-  const countClass = countClasses[ingredient.count];
-  return ingredient.count
+  const countClass = countClasses[ingredient.quantity];
+  return ingredient.quantity
     ? "pizza__filling " +
         `pizza__filling--${ingredients[ingredient.id]} ` +
         countClass
