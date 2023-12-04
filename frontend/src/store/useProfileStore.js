@@ -2,8 +2,6 @@ import { defineStore } from "pinia";
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
-    userInfo: {},
-    authorized: true,
     addresses: [
       {
         id: 0,
@@ -27,16 +25,6 @@ export const useProfileStore = defineStore("profile", {
   }),
   getters: {},
   actions: {
-    setUserInfo(user) {
-      this.userInfo = user;
-    },
-    authorize(form) {
-      console.log(form);
-      this.authorized = true;
-    },
-    logout() {
-      this.authorized = false;
-    },
     async getAddresses() {
       const response = await fetch("url");
       const result = await response.json();

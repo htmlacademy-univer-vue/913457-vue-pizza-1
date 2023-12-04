@@ -1,3 +1,5 @@
+import { isAuth } from "./middlewares/isAuth.js";
+
 export const routes = [
   {
     path: "/",
@@ -40,6 +42,9 @@ export const routes = [
             children: [],
           },
         ],
+        meta: {
+          middlewares: [isAuth],
+        },
       },
     ],
   },
@@ -48,5 +53,8 @@ export const routes = [
     name: "LoginView",
     component: () => import("../views/LoginView.vue"),
     children: [],
+    meta: {
+      middlewares: [(params) => isAuth(params, true)],
+    },
   },
 ];
