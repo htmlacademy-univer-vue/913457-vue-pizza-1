@@ -88,7 +88,7 @@
             />
           </label>
 
-          <AppDrop @drop="dropped">
+          <AppDrop @drop="addIngredient">
             <PizzaItem :params="pizzaParams" />
           </AppDrop>
 
@@ -140,7 +140,7 @@ let pizzaParams = reactive(
 );
 const sum = computed(() => getPizzaPrice(pizzaParams));
 
-const dropped = ({ ingredient, index }) => {
+const addIngredient = ({ ingredient, index }) => {
   let target = pizzaParams.ingredients[index];
 
   if (target.name) {
@@ -172,7 +172,7 @@ const isDisabled = computed(
 @import "@/assets/scss/app.scss";
 
 .content {
-  padding-top: 20px;
+  padding-top: 82px;
 }
 
 .content__wrapper {

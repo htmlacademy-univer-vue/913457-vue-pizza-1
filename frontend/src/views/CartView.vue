@@ -1,5 +1,13 @@
 <template>
-  <form method="post" class="layout-form" @submit.prevent="createOrder">
+  <form
+    method="post"
+    class="layout-form"
+    :class="{ dark: show }"
+    @submit.prevent="createOrder"
+  >
+    <transition name="bounce">
+      <PopupItem v-if="show" />
+    </transition>
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
@@ -115,7 +123,7 @@ import { useProfileStore } from "@/store/useProfileStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import OrderedPizza from "@/modules/cart/OrderedPizza.vue";
 import OrderedMisc from "@/modules/cart/OrderedMisc.vue";
-import { useRouter } from "vue-router";
+import PopupItem from "@/common/components/PopupItem.vue";
 
 const cartStore = useCartStore();
 const commonStore = useCommonStore();
@@ -135,10 +143,9 @@ const selectedAddress = reactive({
   flat: "",
 });
 
-const router = useRouter();
 const newPhone = ref(authStore.userInfo.phone);
 const createOrder = async () => {
-  const userId = authStore.userInfo.id;
+  const userId = authStore.userInfo.id ?? null;
   const phone = newPhone.value ?? authStore.userInfo.phone;
 
   const address =
@@ -166,7 +173,7 @@ const createOrder = async () => {
   chosenWayToGet.value = { name: "Получу сам", id: -1 };
   cartStore.cleanCart();
 
-  router.push("/success");
+  show.value = true;
 };
 
 const options = computed(() => {
@@ -197,14 +204,50 @@ const addressInfo = [
     required: false,
   },
 ];
+const show = ref(false);
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/scss/app.scss";
 
 .layout-form {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding-top: 62px;
+}
+
+.dark {
+  &::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

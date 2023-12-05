@@ -57,7 +57,11 @@ const logout = () => {
 @import "@/assets/scss/app.scss";
 
 .header {
-  position: relative;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 62px;
   z-index: 2;
 
   display: flex;

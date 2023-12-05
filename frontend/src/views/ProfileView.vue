@@ -1,30 +1,31 @@
 <template>
-  <div class="layout__sidebar sidebar">
-    <router-link to="/" class="logo layout__logo">
-      <img
-        src="@/assets/img/logo.svg"
-        alt="V!U!E! Pizza logo"
-        width="90"
-        height="40"
-      />
-    </router-link>
-
+  <div>
     <main class="layout">
-      <router-link
-        class="layout__link"
-        exact-active-class="layout__link--active"
-        to="/profile/orders"
-        >История заказов</router-link
-      >
-      <router-link
-        class="layout__link"
-        exact-active-class="layout__link--active"
-        to="/profile"
-        >Мои данные</router-link
-      >
+      <div class="layout__sidebar sidebar">
+        <router-link
+          class="layout__link"
+          exact-active-class="layout__link--active"
+          to="/profile/orders"
+          >История заказов</router-link
+        >
+        <router-link
+          class="layout__link"
+          exact-active-class="layout__link--active"
+          to="/profile"
+          >Мои данные</router-link
+        >
+      </div>
     </main>
+    <router-view v-slot="{ Component }">
+      <transition
+        name="view"
+        appear
+        enter-active-class="animate__animated animate__bounceInRight"
+      >
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
-  <router-view />
 </template>
 
 <style lang="scss">
@@ -47,7 +48,7 @@
   &__sidebar {
     position: fixed;
     z-index: 2;
-    top: 0;
+    top: 62px;
     left: 0;
     width: 190px;
     height: 100%;

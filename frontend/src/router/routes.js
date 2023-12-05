@@ -49,15 +49,6 @@ export const routes = [
     ],
   },
   {
-    path: "/success",
-    name: "SuccessView",
-    component: () => import("../views/SuccessView.vue"),
-    children: [],
-    meta: {
-      middlewares: [isAuth],
-    },
-  },
-  {
     path: "/login",
     name: "LoginView",
     component: () => import("../views/LoginView.vue"),
