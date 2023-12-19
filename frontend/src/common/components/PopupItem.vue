@@ -17,7 +17,9 @@
 @import "@/assets/scss/app.scss";
 
 .popup {
-  @include pf_center-all;
+  position: fixed;
+  top: 40%;
+  left: 40%;
 
   z-index: 10;
 
@@ -48,14 +50,14 @@
     top: 15px;
     left: 15px;
 
-    background-image: url("../img/filling/ananas.svg");
+    background-image: url("../../assets/img/filling/ananas.svg");
   }
 
   &::after {
     right: 15px;
     bottom: 15px;
 
-    background-image: url("../img/filling/tomatoes.svg");
+    background-image: url("../../assets/img/filling/tomatoes.svg");
   }
 
   p {

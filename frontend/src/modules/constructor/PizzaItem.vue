@@ -2,11 +2,13 @@
   <div class="content__constructor">
     <div :class="getPizzaClass()">
       <div class="pizza__wrapper">
-        <div
-          v-for="ingredient in displayedIngredients"
-          :key="ingredient[0]"
-          :class="getIngredientClass(ingredient)"
-        ></div>
+        <transition-group name="ingredients">
+          <div
+            v-for="ingredient in displayedIngredients"
+            :key="ingredient.id"
+            :class="getIngredientClass(ingredient)"
+          ></div>
+        </transition-group>
       </div>
     </div>
   </div>
@@ -53,5 +55,16 @@ const getIngredientClass = (ingredient) => {
   margin-top: 25px;
   margin-right: auto;
   margin-left: auto;
+}
+
+.ingredients-enter-active,
+.ingredients-leave-active {
+  transition: all 0.5s ease;
+}
+
+.ingredients-enter-from,
+.ingredients-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
 }
 </style>
